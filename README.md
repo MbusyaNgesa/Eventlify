@@ -5,3 +5,4 @@ This will be different from your normal event apps since  a user after subscript
 be informed directly to the different genres of choice.
 Users will receive direct messages to their phones informing them of the event that they 
 subscribed to be it Jazz, Rock or Reggae.
+This will be a game changer to the industry and everything in general.
