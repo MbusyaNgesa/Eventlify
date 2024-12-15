@@ -156,7 +156,7 @@ export function EventList({ title, status }: EventListProps) {
               <TableCell className="font-medium">{event.name}</TableCell>
               <TableCell>{event.date}</TableCell>
               <TableCell>{event.ticketsSold}</TableCell>
-              <TableCell>${event.revenue}</TableCell>
+              <TableCell>KES {event.revenue}</TableCell>
               <TableCell>{event.status}</TableCell>
               <TableCell>
                 <Dialog>

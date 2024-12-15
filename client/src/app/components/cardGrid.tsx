@@ -17,7 +17,7 @@ const events = [
     date: "2024-01-20",
     name: "Summer Music Festival",
     location: "Central Park, NY",
-    price: 49.99,
+    price: 2000,
   },
   {
     id: 2,
@@ -25,7 +25,7 @@ const events = [
     date: "2024-01-25",
     name: "Tech Conference 2024",
     location: "Convention Center, SF",
-    price: 299.99,
+    price: 5000,
   },
   {
     id: 3,
@@ -33,7 +33,7 @@ const events = [
     date: "2024-02-01",
     name: "Food & Wine Expo",
     location: "Downtown Plaza, LA",
-    price: 79.99,
+    price: 500,
   },
   {
     id: 4,
@@ -41,7 +41,7 @@ const events = [
     date: "2024-02-05",
     name: "Art Gallery Opening",
     location: "Modern Museum, CHI",
-    price: 25.0,
+    price: 0,
   },
 ];
 
@@ -95,8 +95,7 @@ export function EventCard({ event }: { event: (typeof events)[0] }) {
             {event.location}
           </div>
           <div className="flex items-center text-sm">
-            <DollarSign className="w-4 h-4" />
-            {event.price.toFixed(2)}
+            KES {event.price.toFixed(2)}
           </div>
         </div>
       </CardContent>

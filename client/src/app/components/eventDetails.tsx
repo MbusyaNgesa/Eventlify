@@ -207,11 +207,11 @@ export function EventDetails({ event, isPreview = false }: EventDetailsProps) {
             <CardContent className="p-4 space-y-4">
               <div className="flex justify-between">
                 <span>Service Fee</span>
-                <span>$0</span>
+                <span>KES 0</span>
               </div>
               <div className="flex justify-between">
                 <span>Amount</span>
-                <span>${totalAmount.toFixed(2)}</span>
+                <span>KES {totalAmount.toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
                 <span>Number of Tickets</span>
@@ -219,7 +219,7 @@ export function EventDetails({ event, isPreview = false }: EventDetailsProps) {
               </div>
               <div className="flex justify-between font-bold">
                 <span>Total Amount</span>
-                <span>${totalAmount.toFixed(2)}</span>
+                <span>KES {totalAmount.toFixed(2)}</span>
               </div>
               <Button className="w-full">Book Now</Button>
             </CardContent>

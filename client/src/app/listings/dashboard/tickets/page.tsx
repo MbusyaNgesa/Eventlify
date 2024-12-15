@@ -50,7 +50,7 @@ export default function TicketsPage() {
             <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${totalRevenue}</div>
+            <div className="text-2xl font-bold">KES {totalRevenue}</div>
           </CardContent>
         </Card>
       </div>
@@ -67,7 +67,7 @@ export default function TicketsPage() {
             <TableRow key={sale.id}>
               <TableCell className="font-medium">{sale.eventName}</TableCell>
               <TableCell>{sale.ticketsSold}</TableCell>
-              <TableCell>${sale.revenue}</TableCell>
+              <TableCell>KES {sale.revenue}</TableCell>
             </TableRow>
           ))}
         </TableBody>

@@ -69,7 +69,7 @@ export default function DashboardPage() {
             <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$12,345</div>
+            <div className="text-2xl font-bold">KES 12,345</div>
           </CardContent>
         </Card>
         <Card>
