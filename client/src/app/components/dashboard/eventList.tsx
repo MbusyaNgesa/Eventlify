@@ -8,6 +8,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { EventDetails } from "../eventDetails";
 
 interface Event {
   id: number;
@@ -16,6 +23,14 @@ interface Event {
   ticketsSold: number;
   revenue: number;
   status: "current" | "previous" | "approved" | "declined" | "draft";
+  images: string[];
+  location: string;
+  description: string;
+  tickets: {
+    advance: { price: number };
+    regular: { price: number };
+    vip: { price: number };
+  };
 }
 
 const events: Event[] = [
@@ -26,6 +41,17 @@ const events: Event[] = [
     ticketsSold: 500,
     revenue: 25000,
     status: "current",
+    images: [
+      "/placeholder.svg?height=400&width=800&text=Event+Photo+1",
+      "/placeholder.svg?height=400&width=800&text=Event+Photo+2",
+    ],
+    location: "Central Park, NY",
+    description: "A wonderful jazz festival under the summer sky.",
+    tickets: {
+      advance: { price: 50 },
+      regular: { price: 75 },
+      vip: { price: 150 },
+    },
   },
   {
     id: 2,
@@ -34,6 +60,14 @@ const events: Event[] = [
     ticketsSold: 750,
     revenue: 37500,
     status: "approved",
+    images: [],
+    location: "",
+    description: "",
+    tickets: {
+      advance: { price: 0 },
+      regular: { price: 0 },
+      vip: { price: 0 },
+    },
   },
   {
     id: 3,
@@ -42,6 +76,14 @@ const events: Event[] = [
     ticketsSold: 300,
     revenue: 15000,
     status: "draft",
+    images: [],
+    location: "",
+    description: "",
+    tickets: {
+      advance: { price: 0 },
+      regular: { price: 0 },
+      vip: { price: 0 },
+    },
   },
   {
     id: 4,
@@ -50,6 +92,14 @@ const events: Event[] = [
     ticketsSold: 1000,
     revenue: 50000,
     status: "previous",
+    images: [],
+    location: "",
+    description: "",
+    tickets: {
+      advance: { price: 0 },
+      regular: { price: 0 },
+      vip: { price: 0 },
+    },
   },
   {
     id: 5,
@@ -58,6 +108,14 @@ const events: Event[] = [
     ticketsSold: 0,
     revenue: 0,
     status: "declined",
+    images: [],
+    location: "",
+    description: "",
+    tickets: {
+      advance: { price: 0 },
+      regular: { price: 0 },
+      vip: { price: 0 },
+    },
   },
 ];
 
@@ -101,11 +159,15 @@ export function EventList({ title, status }: EventListProps) {
               <TableCell>${event.revenue}</TableCell>
               <TableCell>{event.status}</TableCell>
               <TableCell>
-                <Button asChild variant="outline">
-                  <Link href={`/listings/dashboard/events/${event.id}`}>
-                    View
-                  </Link>
-                </Button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline">View</Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-4xl">
+                    <DialogTitle>{event.name}</DialogTitle>
+                    <EventDetails event={event} />
+                  </DialogContent>
+                </Dialog>
               </TableCell>
             </TableRow>
           ))}

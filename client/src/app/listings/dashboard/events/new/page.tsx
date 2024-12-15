@@ -7,6 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { DatePicker } from "@/components/ui/date-picker";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { EventDetails } from "@/app/components/eventDetails";
+import { ImageUpload } from "@/app/components/dashboard/imageUpload";
 
 export default function NewEventPage() {
   const router = useRouter();
@@ -16,6 +19,8 @@ export default function NewEventPage() {
     location: "",
     description: "",
     ticketPrice: "",
+    images: [] as File[],
+    mainImageIndex: 0,
   });
 
   const handleChange = (
@@ -31,6 +36,14 @@ export default function NewEventPage() {
     }
   };
 
+  const handleImagesChange = (images: File[]) => {
+    setEventData((prev) => ({ ...prev, images }));
+  };
+
+  const handleMainImageChange = (index: number) => {
+    setEventData((prev) => ({ ...prev, mainImageIndex: index }));
+  };
+
   const handleSubmit = (e: React.FormEvent, isDraft: boolean) => {
     e.preventDefault();
     // Here you would typically send the data to your backend
@@ -41,6 +54,19 @@ export default function NewEventPage() {
         ? "/listings/dashboard/events/drafts"
         : "/listings/dashboard/events/current"
     );
+  };
+
+  const previewEvent = {
+    ...eventData,
+    id: "preview",
+    images: eventData.images.map((file) => URL.createObjectURL(file)),
+    tickets: {
+      advance: { price: parseFloat(eventData.ticketPrice) || 0 },
+      regular: { price: parseFloat(eventData.ticketPrice) || 0 },
+      vip: { price: parseFloat(eventData.ticketPrice) || 0 },
+    },
+    vendors: [],
+    relatedEvents: [],
   };
 
   return (
@@ -60,7 +86,7 @@ export default function NewEventPage() {
         <div className="space-y-2">
           <Label htmlFor="date">Event Date</Label>
           <DatePicker
-          //    date={eventData.date} setDate={handleDateChange}
+          //  date={eventData.date} setDate={handleDateChange}
           />
         </div>
         <div className="space-y-2">
@@ -94,6 +120,13 @@ export default function NewEventPage() {
             required
           />
         </div>
+        <div className="space-y-2">
+          <Label>Event Images</Label>
+          <ImageUpload
+            onImagesChange={handleImagesChange}
+            onMainImageChange={handleMainImageChange}
+          />
+        </div>
         <div className="flex space-x-4">
           <Button type="submit">Create Event</Button>
           <Button
@@ -103,6 +136,16 @@ export default function NewEventPage() {
           >
             Save as Draft
           </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button type="button" variant="secondary">
+                Preview
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-4xl">
+              <EventDetails event={previewEvent} isPreview={true} />
+            </DialogContent>
+          </Dialog>
         </div>
       </form>
     </div>

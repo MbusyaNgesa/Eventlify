@@ -28,7 +28,12 @@ interface TicketType {
   quantity: number;
 }
 
-export function EventDetails({ event }: any) {
+interface EventDetailsProps {
+  event: any;
+  isPreview?: boolean;
+}
+
+export function EventDetails({ event, isPreview = false }: EventDetailsProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [tickets, setTickets] = useState<TicketType[]>([
     { type: "advance", price: event.tickets.advance.price, quantity: 0 },
@@ -62,7 +67,11 @@ export function EventDetails({ event }: any) {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-8">
+    <div
+      className={`container mx-auto px-4 py-8 space-y-8 ${
+        isPreview ? "max-h-[80vh] overflow-y-auto" : ""
+      }`}
+    >
       {/* Image Carousel */}
       <Card className="overflow-hidden">
         <CardContent className="p-0 relative">
@@ -100,10 +109,22 @@ export function EventDetails({ event }: any) {
             </div>
           </div>
           <div className="p-4">
-            <Button variant="outline" className="mb-3">
-              View Photos
-            </Button>
-            <h1 className="text-2xl font-bold">{event.name}</h1>
+            <ScrollArea className="w-full whitespace-nowrap">
+              <div className="flex space-x-2">
+                {event.images.map((image: string, index: number) => (
+                  <img
+                    key={index}
+                    src={image}
+                    alt={`${event.name} thumbnail ${index + 1}`}
+                    className={`w-20 h-20 object-cover rounded-md cursor-pointer ${
+                      index === currentImageIndex ? "ring-2 ring-primary" : ""
+                    }`}
+                    onClick={() => setCurrentImageIndex(index)}
+                  />
+                ))}
+              </div>
+            </ScrollArea>
+            <h1 className="text-2xl font-bold mt-4">{event.name}</h1>
           </div>
         </CardContent>
       </Card>
@@ -121,7 +142,7 @@ export function EventDetails({ event }: any) {
             <div className="space-y-4">
               <div>
                 <h3 className="font-semibold">Host</h3>
-                <p>{event.hostName}</p>
+                <p>{event.hostName || "TBA"}</p>
               </div>
               <div>
                 <h3 className="font-semibold">Description</h3>
@@ -139,123 +160,133 @@ export function EventDetails({ event }: any) {
           <MapPin className="h-4 w-4" />
           {event.location}
         </div>
-        <div className="text-muted-foreground">Genre: {event.genre}</div>
+        {event.genre && (
+          <div className="text-muted-foreground">Genre: {event.genre}</div>
+        )}
       </div>
 
       {/* Tickets */}
-      <div className="grid md:grid-cols-2 gap-4">
-        <Card>
-          <CardContent className="p-4 space-y-4">
-            {tickets.map((ticket) => (
-              <div
-                key={ticket.type}
-                className="flex items-center justify-between"
-              >
-                <div>
-                  <div className="font-semibold capitalize">{ticket.type}</div>
-                  <div className="text-muted-foreground">${ticket.price}</div>
+      {!isPreview && (
+        <div className="grid md:grid-cols-2 gap-4">
+          <Card>
+            <CardContent className="p-4 space-y-4">
+              {tickets.map((ticket) => (
+                <div
+                  key={ticket.type}
+                  className="flex items-center justify-between"
+                >
+                  <div>
+                    <div className="font-semibold capitalize">
+                      {ticket.type}
+                    </div>
+                    <div className="text-muted-foreground">${ticket.price}</div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => updateTicketQuantity(ticket.type, false)}
+                    >
+                      <Minus className="h-4 w-4" />
+                    </Button>
+                    <span className="w-8 text-center">{ticket.quantity}</span>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => updateTicketQuantity(ticket.type, true)}
+                    >
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => updateTicketQuantity(ticket.type, false)}
-                  >
-                    <Minus className="h-4 w-4" />
-                  </Button>
-                  <span className="w-8 text-center">{ticket.quantity}</span>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => updateTicketQuantity(ticket.type, true)}
-                  >
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
+              ))}
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardContent className="p-4 space-y-4">
-            <div className="flex justify-between">
-              <span>Service Fee</span>
-              <span>$0</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Amount</span>
-              <span>${totalAmount.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Number of Tickets</span>
-              <span>{totalQuantity}</span>
-            </div>
-            <div className="flex justify-between font-bold">
-              <span>Total Amount</span>
-              <span>${totalAmount.toFixed(2)}</span>
-            </div>
-            <Button className="w-full">Book Now</Button>
-          </CardContent>
-        </Card>
-      </div>
+          <Card>
+            <CardContent className="p-4 space-y-4">
+              <div className="flex justify-between">
+                <span>Service Fee</span>
+                <span>$0</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Amount</span>
+                <span>${totalAmount.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Number of Tickets</span>
+                <span>{totalQuantity}</span>
+              </div>
+              <div className="flex justify-between font-bold">
+                <span>Total Amount</span>
+                <span>${totalAmount.toFixed(2)}</span>
+              </div>
+              <Button className="w-full">Book Now</Button>
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       {/* Vendors */}
-      <div>
-        <h2 className="text-2xl font-semibold mb-4">Vendors</h2>
-        <ScrollArea className="w-full whitespace-nowrap rounded-md">
-          <div className="flex gap-4 p-4">
-            {event.vendors.map((vendor: any) => (
-              <Dialog key={vendor.id}>
-                <DialogTrigger asChild>
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    className="flex-shrink-0 w-48 cursor-pointer"
-                  >
-                    <div className="aspect-square rounded-lg overflow-hidden">
+      {!isPreview && event.vendors && event.vendors.length > 0 && (
+        <div>
+          <h2 className="text-2xl font-semibold mb-4">Vendors</h2>
+          <ScrollArea className="w-full whitespace-nowrap rounded-md">
+            <div className="flex gap-4 p-4">
+              {event.vendors.map((vendor: any) => (
+                <Dialog key={vendor.id}>
+                  <DialogTrigger asChild>
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      className="flex-shrink-0 w-48 cursor-pointer"
+                    >
+                      <div className="aspect-square rounded-lg overflow-hidden">
+                        <img
+                          src={vendor.image}
+                          alt={vendor.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <h3 className="mt-2 font-semibold">{vendor.name}</h3>
+                    </motion.div>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>{vendor.name}</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4">
                       <img
                         src={vendor.image}
                         alt={vendor.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-48 object-cover rounded-lg"
                       />
+                      <p>{vendor.description}</p>
                     </div>
-                    <h3 className="mt-2 font-semibold">{vendor.name}</h3>
-                  </motion.div>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>{vendor.name}</DialogTitle>
-                  </DialogHeader>
-                  <div className="space-y-4">
-                    <img
-                      src={vendor.image}
-                      alt={vendor.name}
-                      className="w-full h-48 object-cover rounded-lg"
-                    />
-                    <p>{vendor.description}</p>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            ))}
-          </div>
-        </ScrollArea>
-      </div>
+                  </DialogContent>
+                </Dialog>
+              ))}
+            </div>
+          </ScrollArea>
+        </div>
+      )}
 
       {/* Related Events */}
-      <div>
-        <h2 className="text-2xl font-semibold mb-4">Events you may like</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {event.relatedEvents.map((relatedEvent: any) => (
-            <motion.div
-              key={relatedEvent.id}
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.2 }}
-            >
-              <EventCard event={relatedEvent} />
-            </motion.div>
-          ))}
+      {!isPreview && event.relatedEvents && event.relatedEvents.length > 0 && (
+        <div>
+          <h2 className="text-2xl font-semibold mb-4">Events you may like</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {event.relatedEvents.map((relatedEvent: any) => (
+              <motion.div
+                key={relatedEvent.id}
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.2 }}
+              >
+                <EventCard event={relatedEvent} />
+              </motion.div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
