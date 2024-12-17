@@ -22,14 +22,46 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { motion } from "framer-motion";
 import { EventCard } from "./cardGrid";
 
+import Image from "next/image";
 interface TicketType {
   type: "advance" | "regular" | "vip";
   price: number;
   quantity: number;
 }
+interface Event {
+  id: string;
+  name: string;
+  images: string[];
+  tickets: {
+    advance: { price: number };
+    regular: { price: number };
+    vip: { price: number };
+  };
+  date: string;
+  location: string;
+  genre?: string;
+  hostName?: string;
+  description?: string;
+  vendors?: Vendor[];
+  relatedEvents?: RelatedEvent[];
+}
+
+interface Vendor {
+  id: string;
+  name: string;
+  image: string;
+  description: string;
+}
+
+interface RelatedEvent {
+  id: string;
+  name: string;
+  images: string[];
+  location: string;
+}
 
 interface EventDetailsProps {
-  event: any;
+  event: Event;
   isPreview?: boolean;
 }
 
@@ -76,7 +108,7 @@ export function EventDetails({ event, isPreview = false }: EventDetailsProps) {
       <Card className="overflow-hidden">
         <CardContent className="p-0 relative">
           <div className="relative aspect-[2/1] overflow-hidden">
-            <img
+            <Image
               src={event.images[currentImageIndex]}
               alt={`${event.name} photo ${currentImageIndex + 1}`}
               className="w-full h-full object-cover"
@@ -112,7 +144,7 @@ export function EventDetails({ event, isPreview = false }: EventDetailsProps) {
             <ScrollArea className="w-full whitespace-nowrap">
               <div className="flex space-x-2">
                 {event.images.map((image: string, index: number) => (
-                  <img
+                  <Image
                     key={index}
                     src={image}
                     alt={`${event.name} thumbnail ${index + 1}`}
@@ -233,7 +265,7 @@ export function EventDetails({ event, isPreview = false }: EventDetailsProps) {
           <h2 className="text-2xl font-semibold mb-4">Vendors</h2>
           <ScrollArea className="w-full whitespace-nowrap rounded-md">
             <div className="flex gap-4 p-4">
-              {event.vendors.map((vendor: any) => (
+              {event.vendors.map((vendor) => (
                 <Dialog key={vendor.id}>
                   <DialogTrigger asChild>
                     <motion.div
@@ -241,7 +273,7 @@ export function EventDetails({ event, isPreview = false }: EventDetailsProps) {
                       className="flex-shrink-0 w-48 cursor-pointer"
                     >
                       <div className="aspect-square rounded-lg overflow-hidden">
-                        <img
+                        <Image
                           src={vendor.image}
                           alt={vendor.name}
                           className="w-full h-full object-cover"
@@ -255,7 +287,7 @@ export function EventDetails({ event, isPreview = false }: EventDetailsProps) {
                       <DialogTitle>{vendor.name}</DialogTitle>
                     </DialogHeader>
                     <div className="space-y-4">
-                      <img
+                      <Image
                         src={vendor.image}
                         alt={vendor.name}
                         className="w-full h-48 object-cover rounded-lg"

@@ -5,6 +5,7 @@ import { ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 
 interface Memory {
   id: number;
@@ -136,7 +137,7 @@ export function MemoryCalendar() {
                         index === 2 ? "opacity-50" : ""
                       }`}
                     >
-                      <img
+                      <Image
                         src={memory.image}
                         alt={`Memory from ${memory.month}`}
                         className="object-cover w-full h-full"

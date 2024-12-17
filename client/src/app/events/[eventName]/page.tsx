@@ -7,7 +7,11 @@ interface PageProps {
 }
 
 export default function EventPage({ params }: PageProps) {
-  // In a real app, fetch event data based on eventName
+  //Fetch event data based on eventName
+  const { eventName } = params;
+
+  // Placeholder for future fetch logic
+  console.log(`Fetching event data for: ${eventName}`);
   const eventData = {
     id: "1",
     name: "Summer Jazz Festival",
@@ -22,31 +26,31 @@ export default function EventPage({ params }: PageProps) {
     description: "Join us for an evening of smooth jazz under the stars...",
     hostName: "Jazz Entertainment Inc.",
     tickets: {
-      advance: { price: 79.99 },
-      regular: { price: 99.99 },
-      vip: { price: 199.99 },
+      advance: { price: 1000 },
+      regular: { price: 2000 },
+      vip: { price: 5000 },
     },
     vendors: [
       {
-        id: 1,
+        id: "1",
         name: "Jazz Cafe",
         image: "/placeholder.svg?height=200&width=200&text=Vendor+1",
         description: "Serving the finest coffee and snacks",
       },
       {
-        id: 2,
+        id: "2",
         name: "Sound Systems",
         image: "/placeholder.svg?height=200&width=200&text=Vendor+2",
         description: "Professional audio equipment",
       },
       {
-        id: 3,
+        id: "3",
         name: "Event Decor",
         image: "/placeholder.svg?height=200&width=200&text=Vendor+3",
         description: "Beautiful event decorations",
       },
       {
-        id: 4,
+        id: "4",
         name: "Security Services",
         image: "/placeholder.svg?height=200&width=200&text=Vendor+4",
         description: "Professional security services",
@@ -54,12 +58,12 @@ export default function EventPage({ params }: PageProps) {
     ],
     relatedEvents: [
       {
-        id: 1,
-        image: "/placeholder.svg?height=300&width=300&text=Related+1",
+        id: "1",
+        images: ["/placeholder.svg?height=300&width=300&text=Related+1"],
         date: "2024-02-15",
         name: "Blues Night",
         location: "Jazz Club, NY",
-        price: 59.99,
+        price: 2100,
       },
       // ... more related events
     ],

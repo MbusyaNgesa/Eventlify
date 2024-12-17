@@ -30,11 +30,11 @@ export default function NewEventPage() {
     setEventData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleDateChange = (date: Date | undefined) => {
-    if (date) {
-      setEventData((prev) => ({ ...prev, date }));
-    }
-  };
+  // const handleDateChange = (date: Date | undefined) => {
+  //   if (date) {
+  //     setEventData((prev) => ({ ...prev, date }));
+  //   }
+  // };
 
   const handleImagesChange = (images: File[]) => {
     setEventData((prev) => ({ ...prev, images }));
