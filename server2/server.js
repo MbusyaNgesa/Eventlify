@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 
 import authRoutes from "./routes/authRoutes.js";
 import eventRoutes from "./routes/eventRoutes.js";
+import ticketRoutes from "./routes/ticketRoute.js";
 import { connectDB } from "./db/connectDB.js";
 import { protect } from "./middleware/authMiddleware.js";
 
@@ -19,6 +20,7 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api", protect);
+app.use("/api/tickets", ticketRoutes);
 
 app.listen(PORT, () => {
   connectDB();

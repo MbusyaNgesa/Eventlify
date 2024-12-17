@@ -12,6 +12,10 @@ const router = express.Router();
 router.post(
   "/",
   protect,
+  (req, res, next) => {
+    console.log("User data in request:", req.user);
+    next();
+  },
   authorize("organizer", "admin"),
   [
     body("name").notEmpty().withMessage("Event name is required"),
@@ -24,12 +28,18 @@ router.post(
     body("hostName").notEmpty().withMessage("Host name is required"),
   ],
   async (req, res) => {
+    // console.log(req.user); // Log user data to verify it's populated correctly
+
+    // console.log("User ID:", req.user.id);
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
     try {
+      console.log("Creating event with organizer:", req.user.id);
+
       const event = new Event({
         ...req.body,
         organizer: req.user.id,
