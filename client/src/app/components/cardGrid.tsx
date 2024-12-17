@@ -3,63 +3,72 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Calendar, MapPin, DollarSign } from "lucide-react";
+import { Calendar, MapPin } from "lucide-react";
 import Image from "next/image";
-
+import defaultImage from "../defaultImage.png";
+interface Event {
+  _id: string;
+  name: string;
+  date: string;
+  location: string;
+  images: string[];
+  tickets: { price: number }[];
+}
 interface CardGridProps {
+  events: any[];
   animate?: boolean;
 }
 
-const events = [
-  {
-    id: 1,
-    image: "/placeholder.svg?height=300&width=300&text=Event1",
-    date: "2024-01-20",
-    name: "Summer Music Festival",
-    location: "Central Park, NY",
-    price: 2000,
-  },
-  {
-    id: 2,
-    image: "/placeholder.svg?height=300&width=300&text=Event2",
-    date: "2024-01-25",
-    name: "Tech Conference 2024",
-    location: "Convention Center, SF",
-    price: 5000,
-  },
-  {
-    id: 3,
-    image: "/placeholder.svg?height=300&width=300&text=Event3",
-    date: "2024-02-01",
-    name: "Food & Wine Expo",
-    location: "Downtown Plaza, LA",
-    price: 500,
-  },
-  {
-    id: 4,
-    image: "/placeholder.svg?height=300&width=300&text=Event4",
-    date: "2024-02-05",
-    name: "Art Gallery Opening",
-    location: "Modern Museum, CHI",
-    price: 0,
-  },
-];
+// const events = [
+//   {
+//     id: 1,
+//     image: "/placeholder.svg?height=300&width=300&text=Event1",
+//     date: "2024-01-20",
+//     name: "Summer Music Festival",
+//     location: "Central Park, NY",
+//     price: 2000,
+//   },
+//   {
+//     id: 2,
+//     image: "/placeholder.svg?height=300&width=300&text=Event2",
+//     date: "2024-01-25",
+//     name: "Tech Conference 2024",
+//     location: "Convention Center, SF",
+//     price: 5000,
+//   },
+//   {
+//     id: 3,
+//     image: "/placeholder.svg?height=300&width=300&text=Event3",
+//     date: "2024-02-01",
+//     name: "Food & Wine Expo",
+//     location: "Downtown Plaza, LA",
+//     price: 500,
+//   },
+//   {
+//     id: 4,
+//     image: "/placeholder.svg?height=300&width=300&text=Event4",
+//     date: "2024-02-05",
+//     name: "Art Gallery Opening",
+//     location: "Modern Museum, CHI",
+//     price: 0,
+//   },
+// ];
 
-export function CardGrid({ animate = false }: CardGridProps) {
+export function CardGrid({ events, animate = false }: CardGridProps) {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {events.map((event) =>
           animate ? (
             <motion.div
-              key={event.id}
+              key={event._id}
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
               <EventCard event={event} />
             </motion.div>
           ) : (
-            <EventCard key={event.id} event={event} />
+            <EventCard key={event._id} event={event} />
           )
         )}
       </div>
@@ -70,12 +79,12 @@ export function CardGrid({ animate = false }: CardGridProps) {
   );
 }
 
-export function EventCard({ event }: { event: (typeof events)[0] }) {
+export function EventCard({ event }: { event: Event }) {
   return (
     <Card className="overflow-hidden">
       <div className="aspect-[4/3] relative">
         <Image
-          src={event.image}
+          src={event.images?.[0] || defaultImage}
           alt={event.name}
           fill
           className="object-cover"
@@ -95,7 +104,11 @@ export function EventCard({ event }: { event: (typeof events)[0] }) {
             {event.location}
           </div>
           <div className="flex items-center text-sm">
-            KES {event.price.toFixed(2)}
+            {/* KES {event.price.toFixed(2)} */}
+            {/* KES {event.tickets[0]?.price.toFixed(2) || "N/A"} */}
+            {event.tickets && event.tickets.length > 0
+              ? event.tickets[0].price.toFixed(2)
+              : "N/A"}
           </div>
         </div>
       </CardContent>

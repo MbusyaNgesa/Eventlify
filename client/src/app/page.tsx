@@ -3,8 +3,11 @@ import { GenreAnimation } from "./components/genreAnimation";
 import { Hero } from "./components/hero";
 import { MemoryCalendar } from "./components/memoryCalendar";
 import { Navigation } from "./components/navigation";
+import { getEvents } from "./services/api";
 
-export default function Home() {
+export default async function Home() {
+  const events = await getEvents();
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
@@ -13,7 +16,7 @@ export default function Home() {
 
         <section>
           <h2 className="text-2xl font-semibold mb-4">Upcoming</h2>
-          <CardGrid />
+          <CardGrid events={events} />
         </section>
 
         <section>

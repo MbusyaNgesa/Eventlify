@@ -1,9 +1,39 @@
+"use client";
+
 import Link from "next/link";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { getUserProfile, logout } from "../services/api";
+import { usePathname } from "next/navigation";
 
 export function Navigation() {
+  const [user, setUser] = useState<any>(null);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData = await getUserProfile();
+        setUser(userData);
+      } catch (error) {
+        console.error("Failed to fetch user profile:", error);
+      }
+    };
+    fetchUser();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setUser(null);
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Failed to logout:", error);
+    }
+  };
+
   return (
     <nav className="border-b">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -35,21 +65,35 @@ export function Navigation() {
           >
             Genres
           </Link>
-          <Link
-            href="/listings"
-            className="text-muted-foreground hover:text-foreground"
-          >
-            Listings
-          </Link>
-          <Link
-            href="/signup"
-            className="text-muted-foreground hover:text-foreground"
-          >
-            Sign Up
-          </Link>
-          <Button variant="outline" className="rounded-full">
-            Login
-          </Button>
+          {user ? (
+            <>
+              <Link
+                href="/listings"
+                className="text-muted-foreground hover:text-foreground"
+              >
+                Listings
+              </Link>
+              <Button
+                onClick={handleLogout}
+                variant="outline"
+                className="rounded-full"
+              >
+                Logout
+              </Button>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/signup"
+                className="text-muted-foreground hover:text-foreground"
+              >
+                Sign Up
+              </Link>
+              <Button asChild variant="outline" className="rounded-full">
+                <Link href="/login">Login</Link>
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </nav>
