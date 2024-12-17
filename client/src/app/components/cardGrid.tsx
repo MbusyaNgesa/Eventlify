@@ -15,8 +15,71 @@ interface Event {
   tickets: { price: number }[];
 }
 interface CardGridProps {
-  events: any[];
+  events: Event[];
   animate?: boolean;
+}
+
+export function CardGrid({ events, animate = false }: CardGridProps) {
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {events.map((event) =>
+          animate ? (
+            <motion.div
+              key={event._id}
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.2 }}
+            >
+              <EventCard event={event} />
+            </motion.div>
+          ) : (
+            <EventCard key={event._id} event={event} />
+          )
+        )}
+      </div>
+      <div className="flex justify-center">
+        <Button variant="outline">Show more</Button>
+      </div>
+    </div>
+  );
+}
+
+export function EventCard({ event }: { event: Event }) {
+  return (
+    <Card className="overflow-hidden">
+      <div className="aspect-[4/3] relative">
+        <Image
+          // src={event.images?.[0] || defaultImage}
+          src={(event.images && event.images[0]) || defaultImage}
+          alt={`Imageof event ${event.name}`}
+          fill
+          className="object-cover"
+        />
+      </div>
+      <CardContent className="p-4">
+        <div className="space-y-2">
+          <div className="flex items-center text-sm text-muted-foreground">
+            <Calendar className="w-4 h-4 mr-2" />
+            {new Date(event.date).toLocaleDateString()}
+          </div>
+          <h3 className="font-semibold leading-none tracking-tight">
+            {event.name}
+          </h3>
+          <div className="flex items-center text-sm text-muted-foreground">
+            <MapPin className="w-4 h-4 mr-2" />
+            {event.location}
+          </div>
+          <div className="flex items-center text-sm">
+            {/* KES {event.price.toFixed(2)} */}
+            {/* KES {event.tickets[0]?.price.toFixed(2) || "N/A"} */}
+            {event.tickets && event.tickets.length > 0
+              ? event.tickets[0].price.toFixed(2)
+              : "N/A"}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
 }
 
 // const events = [
@@ -53,68 +116,6 @@ interface CardGridProps {
 //     price: 0,
 //   },
 // ];
-
-export function CardGrid({ events, animate = false }: CardGridProps) {
-  return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {events.map((event) =>
-          animate ? (
-            <motion.div
-              key={event._id}
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.2 }}
-            >
-              <EventCard event={event} />
-            </motion.div>
-          ) : (
-            <EventCard key={event._id} event={event} />
-          )
-        )}
-      </div>
-      <div className="flex justify-center">
-        <Button variant="outline">Show more</Button>
-      </div>
-    </div>
-  );
-}
-
-export function EventCard({ event }: { event: Event }) {
-  return (
-    <Card className="overflow-hidden">
-      <div className="aspect-[4/3] relative">
-        <Image
-          src={event.images?.[0] || defaultImage}
-          alt={event.name}
-          fill
-          className="object-cover"
-        />
-      </div>
-      <CardContent className="p-4">
-        <div className="space-y-2">
-          <div className="flex items-center text-sm text-muted-foreground">
-            <Calendar className="w-4 h-4 mr-2" />
-            {new Date(event.date).toLocaleDateString()}
-          </div>
-          <h3 className="font-semibold leading-none tracking-tight">
-            {event.name}
-          </h3>
-          <div className="flex items-center text-sm text-muted-foreground">
-            <MapPin className="w-4 h-4 mr-2" />
-            {event.location}
-          </div>
-          <div className="flex items-center text-sm">
-            {/* KES {event.price.toFixed(2)} */}
-            {/* KES {event.tickets[0]?.price.toFixed(2) || "N/A"} */}
-            {event.tickets && event.tickets.length > 0
-              ? event.tickets[0].price.toFixed(2)
-              : "N/A"}
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
 
 // import { motion } from "framer-motion";
 // import { Button } from "@/components/ui/button";
