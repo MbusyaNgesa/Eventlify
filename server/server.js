@@ -21,6 +21,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api", protect);
 app.use("/api/tickets", ticketRoutes);
+app.use((req, res) => {
+  res.send("API is running");
+});
 
 app.listen(PORT, () => {
   connectDB();
