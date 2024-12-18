@@ -8,10 +8,10 @@ interface PageProps {
 
 export default function EventPage({ params }: PageProps) {
   //Fetch event data based on eventName
-  const { eventName } = params;
+  // const { eventName } = params;
 
-  // Placeholder for future fetch logic
-  console.log(`Fetching event data for: ${eventName}`);
+  // // Placeholder for future fetch logic
+  // console.log(`Fetching event data for: ${eventName}`);
   const eventData = {
     id: "1",
     name: "Summer Jazz Festival",

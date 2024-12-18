@@ -20,10 +20,31 @@ interface CardGridProps {
 }
 
 export function CardGrid({ events, animate = false }: CardGridProps) {
+  if (!events || events.length === 0) {
+    return <p className="text-center text-gray-500">No events available</p>;
+  }
+
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {events.map((event) =>
+        {Array.isArray(events) && events.length > 0 ? (
+          events.map((event) =>
+            animate ? (
+              <motion.div
+                key={event._id}
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.2 }}
+              >
+                <EventCard event={event} />
+              </motion.div>
+            ) : (
+              <EventCard key={event._id} event={event} />
+            )
+          )
+        ) : (
+          <p className="text-center text-gray-500">No events available</p>
+        )}
+        {/* {events.map((event) =>
           animate ? (
             <motion.div
               key={event._id}
@@ -35,7 +56,7 @@ export function CardGrid({ events, animate = false }: CardGridProps) {
           ) : (
             <EventCard key={event._id} event={event} />
           )
-        )}
+        )} */}
       </div>
       <div className="flex justify-center">
         <Button variant="outline">Show more</Button>
@@ -48,12 +69,18 @@ export function EventCard({ event }: { event: Event }) {
   return (
     <Card className="overflow-hidden">
       <div className="aspect-[4/3] relative">
-        <Image
+        {/* <Image
           // src={event.images?.[0] || defaultImage}
           src={(event.images && event.images[0]) || defaultImage}
           alt={`Imageof event ${event.name}`}
           fill
           className="object-cover"
+        /> */}
+        <Image
+          src={event.images[0] || defaultImage}
+          alt={event.name}
+          layout="fill"
+          objectFit="cover"
         />
       </div>
       <CardContent className="p-4">
