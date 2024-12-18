@@ -12,7 +12,12 @@ interface Event {
   date: string;
   location: string;
   images: string[];
-  tickets: { price: number }[];
+  //   tickets: { price: number }[];
+  tickets: {
+    advance: { price: number };
+    regular: { price: number };
+    vip: { price: number };
+  };
 }
 interface CardGridProps {
   events: Event[];
@@ -79,8 +84,10 @@ export function EventCard({ event }: { event: Event }) {
         <Image
           src={event.images[0] || defaultImage}
           alt={event.name}
-          layout="fill"
+          layout="responsive"
           objectFit="cover"
+          width={400}
+          height={200}
         />
       </div>
       <CardContent className="p-4">
@@ -99,9 +106,10 @@ export function EventCard({ event }: { event: Event }) {
           <div className="flex items-center text-sm">
             {/* KES {event.price.toFixed(2)} */}
             {/* KES {event.tickets[0]?.price.toFixed(2) || "N/A"} */}
-            {event.tickets && event.tickets.length > 0
+            {/* {event.tickets && event.tickets.length > 0
               ? event.tickets[0].price.toFixed(2)
-              : "N/A"}
+              : "N/A"} */}
+            {event.tickets.advance.price.toFixed(2)}
           </div>
         </div>
       </CardContent>

@@ -2,16 +2,17 @@ import { EventDetails } from "@/app/components/eventDetails";
 
 interface PageProps {
   params: {
+    // id: string;
     eventName: string;
   };
 }
 
 export default function EventPage({ params }: PageProps) {
   //Fetch event data based on eventName
-  // const { eventName } = params;
+  const { eventName } = params;
 
   // // Placeholder for future fetch logic
-  // console.log(`Fetching event data for: ${eventName}`);
+  console.log(`Fetching event data for: ${eventName}`);
   const eventData = {
     id: "1",
     name: "Summer Jazz Festival",
@@ -58,11 +59,16 @@ export default function EventPage({ params }: PageProps) {
     ],
     relatedEvents: [
       {
-        id: "1",
+        _id: "1",
         images: ["/placeholder.svg?height=300&width=300&text=Related+1"],
         date: "2024-02-15",
         name: "Blues Night",
         location: "Jazz Club, NY",
+        tickets: {
+          advance: { price: 1500 },
+          regular: { price: 2500 },
+          vip: { price: 4000 },
+        },
         price: 2100,
       },
       // ... more related events
@@ -71,3 +77,5 @@ export default function EventPage({ params }: PageProps) {
 
   return <EventDetails event={eventData} />;
 }
+
+//https://home-service-ke.vercel.app/

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { X } from "lucide-react";
+import Image from "next/image";
 
 interface ImageUploadProps {
   onImagesChange: (images: File[]) => void;
@@ -54,7 +55,7 @@ export function ImageUpload({
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {images.map((image, index) => (
           <div key={index} className="relative">
-            <img
+            <Image
               src={URL.createObjectURL(image)}
               alt={`Uploaded image ${index + 1}`}
               className="w-full h-40 object-cover rounded-md"

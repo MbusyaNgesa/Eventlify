@@ -21,15 +21,16 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { motion } from "framer-motion";
 import { EventCard } from "./cardGrid";
-
 import Image from "next/image";
+import defaultImage from "../defaultImage.png";
+
 interface TicketType {
   type: "advance" | "regular" | "vip";
   price: number;
   quantity: number;
 }
 interface Event {
-  id: string;
+  _id?: string;
   name: string;
   images: string[];
   tickets: {
@@ -53,12 +54,29 @@ interface Vendor {
   description: string;
 }
 
-interface RelatedEvent {
-  id: string;
+//Added
+// type TicketOption = {
+//   price: unknown;
+// };
+
+type RelatedEvent = {
+  _id: string;
   name: string;
   images: string[];
   location: string;
-}
+  date: string;
+  // tickets: { price: number }[];
+  // tickets: {
+  //   advance: TicketOption;
+  //   regular: TicketOption;
+  //   vip: TicketOption;
+  // };
+  tickets: {
+    advance: { price: number };
+    regular: { price: number };
+    vip: { price: number };
+  };
+};
 
 interface EventDetailsProps {
   event: Event;
@@ -109,9 +127,11 @@ export function EventDetails({ event, isPreview = false }: EventDetailsProps) {
         <CardContent className="p-0 relative">
           <div className="relative aspect-[2/1] overflow-hidden">
             <Image
-              src={event.images[currentImageIndex]}
+              src={event.images[currentImageIndex] || defaultImage}
               alt={`${event.name} photo ${currentImageIndex + 1}`}
-              className="w-full h-full object-cover"
+              // className="w-full h-full object-cover"
+              layout="fill"
+              objectFit="cover"
             />
             <div className="absolute inset-0 flex items-center justify-between p-4">
               <Button
@@ -148,9 +168,14 @@ export function EventDetails({ event, isPreview = false }: EventDetailsProps) {
                     key={index}
                     src={image}
                     alt={`${event.name} thumbnail ${index + 1}`}
-                    className={`w-20 h-20 object-cover rounded-md cursor-pointer ${
+                    width={80}
+                    height={80}
+                    className={`object-cover rounded-md cursor-pointer ${
                       index === currentImageIndex ? "ring-2 ring-primary" : ""
                     }`}
+                    // className={`w-20 h-20 object-cover rounded-md cursor-pointer ${
+                    //   index === currentImageIndex ? "ring-2 ring-primary" : ""
+                    // }`}
                     onClick={() => setCurrentImageIndex(index)}
                   />
                 ))}
@@ -290,7 +315,9 @@ export function EventDetails({ event, isPreview = false }: EventDetailsProps) {
                       <Image
                         src={vendor.image}
                         alt={vendor.name}
-                        className="w-full h-48 object-cover rounded-lg"
+                        // className="w-full h-48 object-cover rounded-lg"
+                        width={400}
+                        height={200}
                       />
                       <p>{vendor.description}</p>
                     </div>
@@ -307,9 +334,9 @@ export function EventDetails({ event, isPreview = false }: EventDetailsProps) {
         <div>
           <h2 className="text-2xl font-semibold mb-4">Events you may like</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {event.relatedEvents.map((relatedEvent: any) => (
+            {event.relatedEvents.map((relatedEvent, index) => (
               <motion.div
-                key={relatedEvent.id}
+                key={relatedEvent._id || index}
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.2 }}
               >
